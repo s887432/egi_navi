@@ -6,74 +6,130 @@
 #include "uartFunc.h"
 #include "bleDevice.h"
 
+bool gSkip = false;
+
 void btnProcess(NAVI_DIRECTIONS dir, int fdUart)
 {
-	char buff[128];
+	unsigned char buff[128];
 	std::cout << "BLE " << fdUart << std::endl;
 	
 	switch( dir )
 	{
 		case NAVIDIR_ARRIVED:
 			std::cout << "Arrived" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_ARRIVED);
-			sprintf(buff, "Arrived\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_ARRIVED);
+			}
+			else
+			{
+				sprintf((char*)buff, "Arrived\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_LOWER_LEFT:
 			std::cout << "Turn lower left" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LOWER_LEFT);
-			sprintf(buff, "Turn lower left\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LOWER_LEFT);
+			}
+			else
+			{
+				sprintf((char*)buff, "Turn lower left\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_UPPER_LEFT:
 			std::cout << "Turn upper left" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_UPPER_LEFT);
-			sprintf(buff, "Turn upper left\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_UPPER_LEFT);
+			}
+			else
+			{
+				sprintf((char*)buff, "Turn upper left\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_LEFT:
 			std::cout << "Turn left" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LEFT);
-			sprintf(buff, "Turn left\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LEFT);
+			}
+			else
+			{
+				sprintf((char*)buff, "Turn left\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_UPPER_RIGHT:
 			std::cout << "Turn upper right" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_UPPER_RIGHT);
-			sprintf(buff, "Turn upper right\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_UPPER_RIGHT);
+			}
+			else
+			{
+				sprintf((char*)buff, "Turn upper right\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_RIGHT:
 			std::cout << "Turn right" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_RIGHT);
-			sprintf(buff, "Turn right\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_RIGHT);
+			}
+			else
+			{
+				sprintf((char*)buff, "Turn right\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_LOWER_RIGHT:
 			std::cout << "Turn lower right" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LOWER_RIGHT);
-			sprintf(buff, "Turn lower right\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LOWER_RIGHT);
+			}
+			else
+			{
+				sprintf((char*)buff, "Turn lower right\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_LEFT_U_TURN:
 			std::cout << "U Turn - left" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LEFT_U_TURN);
-			sprintf(buff, "U Turn - left\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_LEFT_U_TURN);
+			}
+			else
+			{
+				sprintf((char*)buff, "U Turn - left\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		case NAVIDIR_RIGHT_U_TURN:
 			std::cout << "U Turn - right" << std::endl;
-			bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_RIGHT_U_TURN);
-			sprintf(buff, "U Turn - right\r\n");
-			write(fdUart, buff, strlen(buff));
+			if( !gSkip )
+			{
+				bleSend(fdUart, COMMAND_NAVI_DIRECTION, NAVIDIR_RIGHT_U_TURN);
+			}
+			else
+			{
+				sprintf((char*)buff, "U Turn - right\r\n");
+				write(fdUart, buff, strlen((char*)buff));
+			}
 			break;
 			
 		default:
@@ -85,13 +141,16 @@ void btnProcess(NAVI_DIRECTIONS dir, int fdUart)
 int main(int argc, char** argv)
 {
 	int fdUart;	
-	char buff[128];
+	unsigned char buff[128];
 	
-	if( argc != 2 )
+	if( argc != 3 )
 	{
-		printf("USAGE: uart_transmit UART_PORT\r\n");
+		printf("USAGE: uart_transmit UART_PORT SKIP_BLE\r\n");
 		return -1;
 	}
+	
+	gSkip = atoi(argv[2]);
+	std::cout << gSkip << std::endl;
 
 	fdUart = uartOpen(argv[1]);
 	uartSetSpeed(fdUart, 115200);
@@ -152,8 +211,11 @@ int main(int argc, char** argv)
 		btnUTR->enable();
 		btnA->enable();
 		
-		bleConnect(fdUart);
-		std::cout << "BLE (" << fdUart << ")" << std::endl;
+		if( !gSkip )
+		{
+			bleConnect(fdUart);
+			std::cout << "BLE (" << fdUart << ")" << std::endl;
+		}
 	});
 	
 	btnDisconnect->on_click([&](egt::Event&)
@@ -172,8 +234,11 @@ int main(int argc, char** argv)
 		btnUTR->disable();
 		btnA->disable();
 		
-		bleDisconnect(fdUart);
-		std::cout << "BLE (" << fdUart << ")" << std::endl;
+		if( !gSkip )
+		{
+			bleDisconnect(fdUart);
+			std::cout << "BLE (" << fdUart << ")" << std::endl;
+		}
 	});
 	
 	btnExit->on_click([&](egt::Event&)
@@ -230,4 +295,3 @@ int main(int argc, char** argv)
 
     return app.run();
 }
-
